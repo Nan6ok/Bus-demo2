@@ -1,20 +1,22 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="zh-HK">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Bus Demo</title>
+  <meta charset="UTF-8">
+  <title>巴士實時位置 / Real-time Bus</title>
+  <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <link rel="stylesheet" href="/style.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body>
-  <div id="controls">
-    <button id="lang-en">English</button>
-    <button id="lang-zh">简体中文</button>
-  </div>
-  <div id="map"></div>
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="/main.js"></script>
+  <h2>🚌 巴士實時位置 / Real-time Bus</h2>
+  <div id="clock" style="font-size:20px; margin:10px;"></div>
+
+  <label for="routeSelect">選擇路線 / Select Route:</label>
+  <select id="routeSelect"></select>
+
+  <div id="map" style="height:500px; margin-top:10px;"></div>
+
+  <script src="routes.js"></script>
+  <script src="main.js"></script>
 </body>
 </html>
