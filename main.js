@@ -87,3 +87,74 @@ function updateAllPopups(){
 setInterval(()=> {
   updateAllPopups();
 }, 1000);
+// 初始化地圖
+const map = L.map('map').setView([22.302711, 114.177216], 13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+}).addTo(map);
+
+// 時鐘
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').innerText =
+    now.toLocaleTimeString('zh-HK', { hour12: false });
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// UI - 填充下拉選單
+const routeSelect = document.getElementById("routeSelect");
+for (let key in busRoutes) {
+  let option = document.createElement("option");
+  option.value = key;
+  option.text = busRoutes[key].name_zh + " / " + busRoutes[key].name_en;
+  routeSelect.add(option);
+}
+
+// 畫巴士
+let busMarker, polyline;
+function startRoute(routeId) {
+  if (busMarker) map.removeLayer(busMarker);
+  if (polyline) map.removeLayer(polyline);
+
+  const route = busRoutes[routeId].stops.map(s => s.coord);
+  polyline = L.polyline(route, { color: 'blue' }).addTo(map);
+  map.fitBounds(polyline.getBounds());
+
+  let index = 0;
+  busMarker = L.marker(route[0], {
+    icon: L.icon({
+      iconUrl: 'https://cdn-icons-png.flaticon.com/512/61/61205.png',
+      iconSize: [40, 40]
+    })
+  }).addTo(map);
+
+  function moveBus() {
+    if (index < route.length - 1) {
+      let [lat1, lon1] = route[index];
+      let [lat2, lon2] = route[index + 1];
+      let steps = 50;
+      let step = 0;
+
+      let interval = setInterval(() => {
+        let lat = lat1 + (lat2 - lat1) * (step / steps);
+        let lon = lon1 + (lon2 - lon1) * (step / steps);
+        busMarker.setLatLng([lat, lon]);
+        step++;
+        if (step > steps) {
+          clearInterval(interval);
+          index++;
+          setTimeout(moveBus, 1000); // 停站 1 秒
+        }
+      }, 200);
+    }
+  }
+  moveBus();
+}
+
+// 換路線
+routeSelect.addEventListener("change", e => startRoute(e.target.value));
+
+// 預設載入第一條
+startRoute("1");
+
