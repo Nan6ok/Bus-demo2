@@ -1,0 +1,5 @@
+html,body,#map{ height:100%; margin:0; padding:0; }
+body{ font-family: Arial, sans-serif; }
+#map{ position:fixed; top:40px; left:0; right:0; bottom:0; }
+#controls{ position:fixed; top:6px; left:6px; z-index:1000; }
+#controls button{ margin-right:6px; padding:6px 10px; }
